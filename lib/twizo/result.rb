@@ -15,30 +15,22 @@ module Twizo
 
     attr_reader :result
 
-    #
     # Constructor
-    #
     # @param [Array] result
-    #
     def initialize(result)
       set_fields(result)
     end
 
-    #
     # @param [Array] fields
-    #
     def set_fields(fields)
       fields.each do |name, value|
         add_attribute_accessor(name, value)
       end
     end
 
-    #
     # Getter and Setter fields are dynamically created
-    #
     # @param [String] attr_name
     # @param [Object] attr_value
-    #
     def add_attribute_accessor(attr_name, attr_value)
       self.class.send(:define_method, "#{attr_name}=".to_sym) do |value|
         instance_variable_set('@' + attr_name.to_s, value)
@@ -51,11 +43,8 @@ module Twizo
       self.send("#{attr_name}=".to_sym, attr_value)
     end
 
-    #
     # add an item to parent result
-    #
     # @param [Object] item
-    #
     def add_result(item)
       @result ||= []
       @result << item

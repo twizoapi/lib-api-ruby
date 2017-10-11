@@ -15,49 +15,38 @@ module Twizo
 
   module NumberLookup
 
-    #
     # Getter for params
-    #
     attr_reader :params
 
-    #
     # Bitmasks of which type of result type to send
-    #
     RESULT_TYPE_CALLBACK = 1
-    RESULT_TYPE_POLL = 2
+    RESULT_TYPE_POLL     = 2
 
-    #
-    # @param [Array] numbers
-    #
+    # @param [Array|String] numbers
     def set(numbers)
       @params = NumberLookupParams.new
       @params.numbers = numbers
     end
 
-    #
     # Send message to the server and return response
-    #
-    # @return [Object]
-    #
+    # @return [Twizo::Result]
     def send
       post_params = @params.to_json
 
       response = send_api_call(Entity::ACTION_CREATE, location, post_params)
 
-      raise response if response.kind_of?(TwizoError)
+      raise response if response.is_a?(TwizoError)
 
       response_to_array(response, 'items')
     end
 
-    #
-    # @return [Object]
-    #
+    # @return [Twizo::Result]
     def poll
       response = send_api_call(Entity::ACTION_RETRIEVE, 'numberlookup/poll')
 
-      raise response if response.kind_of?(TwizoError)
+      raise response if response.is_a?(TwizoError)
 
-      batch_id = response['batchId'] unless response['batchId'].nil?
+      batch_id = response['batchId'].nil? ? nil : response['batchId']
 
       unless batch_id.nil?
         send_api_call(Entity::ACTION_REMOVE, 'numberlookup/poll/' + batch_id)
@@ -68,9 +57,7 @@ module Twizo
 
     private
 
-    #
     # @return [String]
-    #
     def location
       'numberlookup/submit'
     end

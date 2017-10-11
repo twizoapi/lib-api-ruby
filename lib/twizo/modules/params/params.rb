@@ -4,22 +4,15 @@ module Twizo
 
   class Params
 
-    #
-    # @param [String|Array] numbers
-    #
+    # @param [String|Array] attributes
     # @return [Array]
-    #
     def format_to_array(attributes)
-      attributes.kind_of?(Array) ? attributes_array = attributes : attributes_array = [attributes]
-
+      attributes_array = attributes.is_a?(Array) ? attributes : [attributes]
       attributes.nil? ? attributes : format_input(attributes_array)
     end
 
-    #
-    # @param [Array] numbers
-    #
+    # @param [Array] attributes
     # @return [Array]
-    #
     def format_input(attributes)
       attributes.map do |attribute|
         attribute.gsub!(/[()+o ]/, '()+ ' => '', 'o' => '0')

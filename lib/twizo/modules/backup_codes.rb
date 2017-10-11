@@ -15,71 +15,55 @@ module Twizo
 
   module BackupCodes
 
-    #
     # Getter for params
-    #
     attr_reader :params
 
-    #
     # @param [String] identifier
-    #
     def set(identifier)
       @params = BackupCodesParams.new
       @params.identifier = identifier
     end
 
-    #
     # Send message to the server and return response
-    #
-    # @return [Object]
-    #
+    # @return [Result]
     def send
       post_params = @params.to_json
 
       response = send_api_call(Entity::ACTION_CREATE, location, post_params)
 
-      raise response if response.kind_of?(TwizoError)
+      raise response if response.is_a?(TwizoError)
 
       response_to_array(response)
     end
 
-    #
     # @param [String] backup_code
-    #
-    # @return [Object]
-    #
+    # @return [Result]
     def verify(backup_code)
       response = send_api_call(Entity::ACTION_RETRIEVE, "#{location}/#{@params.identifier}?token=#{backup_code}")
 
-      raise response if response.kind_of?(TwizoError)
+      raise response if response.is_a?(TwizoError)
 
       response_to_array(response)
     end
 
-    #
     # Update de backup codes
-    #
-    # @return [Object]
-    #
+    # @return [Result]
     def update
       post_params = @params.to_json
 
       response = send_api_call(Entity::ACTION_UPDATE, "#{location}/#{@params.identifier}", post_params)
 
-      raise response if response.kind_of?(TwizoError)
+      raise response if response.is_a?(TwizoError)
 
       response_to_array(response)
     end
 
-    #
     # Delete de backup codes
-    #
-    # @return [Object]
-    #
+    # @return [Net::HTTPNoContent]
     def delete
       response = send_api_call(Entity::ACTION_REMOVE, "#{location}/#{@params.identifier}")
 
-      raise response if response.kind_of?(TwizoError)
+      raise response if response.is_a?(TwizoError)
 
       # return 204 No Content
       response
@@ -87,9 +71,7 @@ module Twizo
 
     private
 
-    #
     # @return [String]
-    #
     def location
       'backupcode'
     end

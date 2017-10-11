@@ -6,13 +6,14 @@ module Twizo
 
     attr_accessor :numbers, :tag, :validity, :result_type, :callback_url
 
+    # @return [Object]
     def to_json
       json = {
-          :numbers         => format_to_array(numbers),
-          :tag                => tag,
-          :validity           => validity,
-          :resultType         => result_type,
-          :callbackUrl        => callback_url,
+          :numbers     => format_to_array(numbers),
+          :tag         => tag,
+          :validity    => validity,
+          :resultType  => result_type,
+          :callbackUrl => callback_url,
       }
 
       json.to_json

@@ -1,3 +1,5 @@
+require_relative 'params/bio_voice_params'
+
 =begin
 
  This file is part of the Twizo php api
@@ -11,23 +13,24 @@
 
 module Twizo
 
-  module Balance
+  module BioVoiceSubscription
 
-    # Send message to the server and return response
-    # @return [Twizo::Result]
-    def send
-      response = send_api_call(Entity::ACTION_RETRIEVE, location)
+    # Delete de bio voice registration
+    # @return [Net::HTTPNoContent]
+    def delete
+      response = send_api_call(Entity::ACTION_REMOVE, "#{location}/#{@params.identifier}")
 
       raise response if response.is_a?(TwizoError)
 
-      response_to_array(response)
+      # return 204 No Content
+      response
     end
 
     private
 
     # @return [String]
     def location
-      'wallet/getbalance'
+      'biovoice/subscription'
     end
 
   end

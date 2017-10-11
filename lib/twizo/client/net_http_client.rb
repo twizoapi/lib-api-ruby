@@ -7,14 +7,12 @@ module Twizo
 
   class NetHttpClient < Client
 
-    #
     # @param [String] method
     # @param [String] location
-    #
-    # @return [Object]
-    #
+    # @param [String] post_params
+    # @return [Net]
     def send_request(method, location, post_params)
-      uri = URI.parse("https://#{@api_host}/#{Client::API_VERSION}/#{location}")
+      uri = URI.parse(get_url(location))
 
       case method
         when 'GET'
@@ -40,7 +38,10 @@ module Twizo
       https.use_ssl = true
 
       https.request(request)
+    end
 
+    def get_url(location)
+      "https://#{@api_host}/#{Client::API_VERSION}/#{location}"
     end
 
   end

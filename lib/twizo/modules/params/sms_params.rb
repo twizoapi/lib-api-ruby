@@ -6,6 +6,8 @@ module Twizo
 
     attr_accessor :recipients, :body, :sender, :sender_ton, :sender_npi, :pid, :scheduled_delivery, :tag, :validity, :result_type, :callback_url, :dcs, :udh
 
+    # @param [Boolean] send_advanced
+    # @return [Object]
     def to_json(send_advanced = nil)
       json = {
           :recipients         => format_to_array(recipients),

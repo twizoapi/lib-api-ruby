@@ -44,8 +44,26 @@ class TestVerification < TestInit
     verification.params.recipient = test_recipient
 
     verification = verification.send
+    puts verification.inspect
+    assert_equal test_recipient, verification.recipient
+    assert_not_nil verification.messageId
+  end
+
+  #
+  # Test creation of verification
+  #
+  def test_create_verification_type
+    verification = @twizo.create_verification(nil)
+
+    test_recipient = NUMBER1
+
+    verification.params.recipient = test_recipient
+    verification.params.type = 'call'
+
+    verification = verification.send
 
     assert_equal test_recipient, verification.recipient
+    assert_equal 'call', verification.type
     assert_not_nil verification.messageId
   end
 

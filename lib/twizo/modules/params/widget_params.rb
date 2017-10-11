@@ -6,11 +6,12 @@ module Twizo
 
     attr_accessor :allowed_types, :recipient, :backup_code_identifier, :token_length, :token_type, :body_template, :sender, :sender_ton, :sender_npi, :tag, :dcs
 
+    # @return [Object]
     def to_json
       json = {
-          :allowedTypes          => allowed_types,
+          :allowedTypes           => allowed_types,
           :recipient              => recipient,
-          :backupCodeIdentifier => backup_code_identifier,
+          :backupCodeIdentifier   => backup_code_identifier,
           :tokenLength            => token_length,
           :tokenType              => token_type,
           :bodyTemplate           => body_template,

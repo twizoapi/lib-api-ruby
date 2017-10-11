@@ -1,4 +1,4 @@
-require_relative 'params/verification_params'
+require_relative 'params/totp_params'
 
 =begin
 
@@ -13,23 +13,17 @@ require_relative 'params/verification_params'
 
 module Twizo
 
-  module Verification
-
-    TYPE_CALL               = 'call'.freeze
-    TYPE_SMS                = 'sms'.freeze
-    TYPE_PUSH               = 'push'.freeze
-    TYPE_BIO_VOICE          = 'biovoice'.freeze
-    TYPE_TELEGRAM           = 'telegram'.freeze
-    TYPE_LINE               = 'line'.freeze
-    TYPE_FACEBOOK_MESSENGER = 'facebook_messenger'.freeze
+  module Totp
 
     # Getter for params
     attr_reader :params
 
-    # @param [String] recipient
-    def set(recipient)
-      @params = VerificationParams.new
-      @params.recipient = recipient
+    # @param [String] identifier
+    # @param [String] issuer
+    def set(identifier, issuer)
+      @params = TotpParams.new
+      @params.identifier = identifier
+      @params.issuer = issuer
     end
 
     # Send message to the server and return response
@@ -45,20 +39,31 @@ module Twizo
     end
 
     # @param [String] token
-    # @return [Twizo::Result]
-    def verify(message_id, token)
-      response = send_api_call(Entity::ACTION_RETRIEVE, "#{location}/#{message_id}?token=#{token}")
+    # @return [Result]
+    def verify(token)
+      response = send_api_call(Entity::ACTION_RETRIEVE, "#{location}/#{@params.identifier}?token=#{token}")
 
       raise response if response.is_a?(TwizoError)
 
       response_to_array(response)
     end
 
+    # Delete de totp
+    # @return [Net::HTTPNoContent]
+    def delete
+      response = send_api_call(Entity::ACTION_REMOVE, "#{location}/#{@params.identifier}")
+
+      raise response if response.is_a?(TwizoError)
+
+      # return 204 No Content
+      response
+    end
+
     private
 
     # @return [String]
     def location
-      'verification/submit'
+      'totp'
     end
 
   end

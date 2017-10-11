@@ -2,14 +2,15 @@ require_relative 'params'
 
 module Twizo
 
-  class BackupCodesParams < Params
+  class TotpParams < Params
 
-    attr_accessor :identifier
+    attr_accessor :identifier, :issuer
 
     # @return [Object]
     def to_json
       json = {
-          :identifier => identifier
+          :identifier => identifier,
+          :issuer     => issuer,
       }
 
       json.to_json

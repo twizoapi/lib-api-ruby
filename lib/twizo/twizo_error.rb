@@ -15,9 +15,11 @@ module Twizo
 
     attr_reader :body
 
+    # @param [Object] code
+    # @param [Object] body
+    # @return [Object]
     def initialize(code, body = nil?)
       super(code)
-
       @body = body
     end
 

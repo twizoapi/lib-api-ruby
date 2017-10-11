@@ -1,11 +1,11 @@
-![Twizo](https://www.twizo.com/wp-content/themes/twizo/_/images/twizo-logo-0474ce6f.png) 
+![Twizo](http://www.twizo.com/online/logo/logo.png) 
 
 # Twizo Ruby API
 
 Connect to the Twizo API using the Ruby library. This API includes functions to send verifications (2FA), SMS and Number Lookup.
 
 ## Requirements ##
-* Ruby >= ???
+* Ruby >= 2.4
 
 ## Get application secret and api host ##
 To use the Twizo API client, the following things are required:
@@ -59,7 +59,7 @@ Verify token
 begin
   verify_token = twizo.verify_token(verification.messageId, '12345')
   puts verify_token
-rescue Twizo::TwizoException => e
+rescue Twizo::TwizoError => e
   puts e.body
 end
 ```

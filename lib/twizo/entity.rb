@@ -16,30 +16,22 @@ module Twizo
 
   class Entity
 
-    #
     # http method actions
-    #
-    ACTION_CREATE = 'POST'
-    ACTION_UPDATE = 'PUT'
-    ACTION_RETRIEVE = 'GET'
-    ACTION_REMOVE = 'DELETE'
+    ACTION_CREATE   = 'POST'.freeze
+    ACTION_UPDATE   = 'PUT'.freeze
+    ACTION_RETRIEVE = 'GET'.freeze
+    ACTION_REMOVE   = 'DELETE'.freeze
 
-    #
     # Constructor
-    #
     # @param [Client] client
-    #
     def initialize(client)
       @client = client
     end
 
-    #
     # @param [String] id
     # @param [String|null] widget_recipient
     # @param [String|null] widget_backup_code_id
-    #
-    # @return [Object]
-    #
+    # @return [Twizo::Result]
     def populate(id, widget_recipient = nil, widget_backup_code_id = nil)
       raise 'Error: id not provided' unless id
 
@@ -49,20 +41,17 @@ module Twizo
 
       response = send_api_call(ACTION_RETRIEVE, "#{location}/#{params}")
 
-      raise response if response.kind_of?(TwizoError)
+      raise response if response.is_a?(TwizoError)
 
       response_to_array(response)
     end
 
     private
 
-    #
     # @param [String] method
     # @param [String] location
     # @param [Object|null] post_params
-    #
     # @return [Object]
-    #
     def send_api_call(method, location, post_params = nil)
       response = @client.send_request(method, location, post_params)
 
@@ -76,12 +65,9 @@ module Twizo
       end
     end
 
-    #
     # @param [Object] response
     # @param [String|null] field
-    #
-    # @return [Object]
-    #
+    # @return [Twizo::Result]
     def response_to_array(response, field = nil)
 
       parent_items = response.reject { |key| key == '_embedded' }
@@ -91,7 +77,7 @@ module Twizo
       if field
         child_items = response['_embedded'][field]
 
-        if child_items.kind_of?(Array)
+        if child_items.is_a?(Array)
 
           child_items.each do |item|
             results.add_result(Result.new(item))

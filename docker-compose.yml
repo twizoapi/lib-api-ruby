@@ -1,0 +1,8 @@
+version: "3.3"
+
+services:
+  twizo:
+    container_name: twizo_lib_ruby
+    build: .
+    volumes:
+      - .:/usr/app/twizo-lib-ruby

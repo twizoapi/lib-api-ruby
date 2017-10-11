@@ -8,4 +8,6 @@
 /spec/reports/
 /tmp/
 /test/credentials.rb
+/test/coverage/
 /examples/credentials.rb
+/lib/coverage/

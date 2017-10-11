@@ -15,72 +15,56 @@ module Twizo
 
   module Sms
 
-    #
     # Getter for params
-    #
     attr_reader :params
 
-    #
     # Bitmasks of which type of result type to send
-    #
     RESULT_TYPE_CALLBACK = 1
-    RESULT_TYPE_POLL = 2
+    RESULT_TYPE_POLL     = 2
 
-    #
     # @param [String] body
     # @param [Array] recipients
     # @param [String] sender
-    #
     def set(body, recipients, sender)
       @params = SmsParams.new
-      @params.body = body
+      @params.body       = body
       @params.recipients = recipients
-      @params.sender = sender
+      @params.sender     = sender
     end
 
-    #
     # Send message to the server and return response
-    #
-    # @return [Object]
-    #
+    # @return [Twizo::Result]
     def send_simple
       post_params = @params.to_json
 
       response = send_api_call(Entity::ACTION_CREATE, 'sms/submitsimple', post_params)
 
-      raise response if response.kind_of?(TwizoError)
+      raise response if response.is_a?(TwizoError)
 
       response_to_array(response, 'items')
     end
 
-    #
     # Send message to the server and return response
-    #
-    # @return [Object]
-    #
+    # @return [Twizo::Result]
     def send
       # set @dcs to 0 if dcs is not set
       @params.dcs ||= 0
-
       @params.body = bin_to_hex(@params.body).upcase if is_binary?
 
       post_params = @params.to_json send_advanced: true
 
       response = send_api_call(Entity::ACTION_CREATE, location, post_params)
 
-      raise response if response.kind_of?(TwizoError)
+      raise response if response.is_a?(TwizoError)
 
       response_to_array(response, 'items')
     end
 
-    #
-    # @return [Object]
-    #
+    # @return [Twizo::Result]
     def poll
-
       response = send_api_call(Entity::ACTION_RETRIEVE, 'sms/poll')
 
-      raise response if response.kind_of?(TwizoError)
+      raise response if response.is_a?(TwizoError)
 
       @batch_id = response['batchId'] unless response['batchId'].nil?
 
@@ -93,16 +77,12 @@ module Twizo
 
     private
 
-    #
     # @return [String]
-    #
     def location
       'sms/submit'
     end
 
-    #
     # @return [Boolean]
-    #
     def is_binary?
       binary = false
 
@@ -115,11 +95,8 @@ module Twizo
       binary
     end
 
-    #
     # @param [Binary] binary_string
-    #
     # @return [Hex]
-    #
     def bin_to_hex(binary_string)
       binary_string.unpack('H*').first
     end
